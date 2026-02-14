@@ -32,8 +32,8 @@ export class UsersService {
         }).exec();
     }
 
-    async findAll(): Promise<User[]> {
-        return this.userModel.find().populate('roles').exec();
+    async findAll(query?: any): Promise<User[]> {
+        return this.userModel.find(query).populate('roles').sort({ createdAt: -1 }).exec();
     }
 
     async assignRole(userId: string, roleId: string): Promise<User | null> {
@@ -42,5 +42,13 @@ export class UsersService {
             { $addToSet: { roles: roleId } },
             { new: true },
         ).populate('roles').exec();
+    }
+
+    async updateStatus(userId: string, isActive: boolean): Promise<User | null> {
+        return this.userModel.findByIdAndUpdate(userId, { isActive }, { new: true }).exec();
+    }
+
+    async remove(userId: string): Promise<User | null> {
+        return this.userModel.findByIdAndDelete(userId).exec();
     }
 }

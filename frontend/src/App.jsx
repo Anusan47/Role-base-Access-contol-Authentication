@@ -4,6 +4,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import RoleMatrix from './pages/RoleMatrix';
+import AnalyticsDashboard from './pages/AnalyticsDashboard';
+import UserManagement from './pages/UserManagement';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -29,6 +31,22 @@ function App() {
                             element={
                                 <ProtectedRoute requiredPermission="manage_permissions">
                                     <RoleMatrix />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/analytics"
+                            element={
+                                <ProtectedRoute requiredPermission="view_dashboard">
+                                    <AnalyticsDashboard />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/users"
+                            element={
+                                <ProtectedRoute requiredPermission="view_users">
+                                    <UserManagement />
                                 </ProtectedRoute>
                             }
                         />

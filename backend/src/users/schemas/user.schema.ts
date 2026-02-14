@@ -17,6 +17,12 @@ export class User {
 
     @Prop({ type: [{ type: Types.ObjectId, ref: 'Role' }] })
     roles: Role[];
+
+    @Prop({ default: true })
+    isActive: boolean;
+
+    @Prop()
+    lastLogin: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

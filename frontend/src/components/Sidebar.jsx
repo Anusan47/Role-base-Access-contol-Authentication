@@ -24,6 +24,14 @@ const Sidebar = () => {
                     <Link to="/matrix" className="p-2 hover:bg-gray-700 rounded">Permission Matrix</Link>
                 )}
 
+                {hasPermission('view_users') && (
+                    <Link to="/users" className="p-2 hover:bg-gray-700 rounded">Users</Link>
+                )}
+
+                {hasPermission('view_dashboard') && ( // Assuming generic dashboard permission or specific one for analytics
+                    <Link to="/analytics" className="p-2 hover:bg-gray-700 rounded">Analytics</Link>
+                )}
+
                 <button onClick={logout} className="p-2 hover:bg-red-700 rounded text-left mt-auto">
                     Logout
                 </button>

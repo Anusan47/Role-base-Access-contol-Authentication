@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, UseGuards, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -8,8 +8,14 @@ export class UsersController {
 
     @Get()
     @UseGuards(JwtAuthGuard)
-    findAll() {
-        return this.usersService.findAll();
+    findAll(@Query('search') search: string) {
+        const query = search ? {
+            $or: [
+                { name: { $regex: search, $options: 'i' } },
+                { email: { $regex: search, $options: 'i' } },
+            ]
+        } : {};
+        return this.usersService.findAll(query);
     }
 
     @Post(':userId/roles/:roleId')
@@ -19,5 +25,20 @@ export class UsersController {
         @Param('roleId') roleId: string,
     ) {
         return this.usersService.assignRole(userId, roleId);
+    }
+
+    @Patch(':userId/status')
+    @UseGuards(JwtAuthGuard)
+    updateStatus(
+        @Param('userId') userId: string,
+        @Body('isActive') isActive: boolean,
+    ) {
+        return this.usersService.updateStatus(userId, isActive);
+    }
+
+    @Delete(':userId')
+    @UseGuards(JwtAuthGuard)
+    remove(@Param('userId') userId: string) {
+        return this.usersService.remove(userId);
     }
 }
