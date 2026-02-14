@@ -3,17 +3,20 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Role, RoleDocument } from '../roles/schemas/role.schema';
 import { Permission, PermissionDocument } from '../roles/schemas/permission.schema';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class SeedService implements OnModuleInit {
     constructor(
         @InjectModel(Role.name) private roleModel: Model<RoleDocument>,
         @InjectModel(Permission.name) private permissionModel: Model<PermissionDocument>,
+        private usersService: UsersService,
     ) { }
 
     async onModuleInit() {
         await this.seedPermissions();
         await this.seedRoles();
+        await this.seedAdminUser();
     }
 
     async seedPermissions() {
@@ -64,5 +67,29 @@ export class SeedService implements OnModuleInit {
                 }
             }
         }
-    }
+
+    async seedAdminUser() {
+            const adminEmail = 'admin@example.com';
+            const adminUser = await this.usersService.findOneByEmail(adminEmail);
+
+            if (!adminUser) {
+                const adminRole = await this.roleModel.findOne({ name: 'Admin' });
+                if (adminRole) {
+                    await this.usersService.create({
+                        const adminEmail = 'admin@example.com';
+                        const adminUser = await this.usersService.findOneByEmail(adminEmail);
+
+                        if(!adminUser) {
+                            const adminRole = await this.roleModel.findOne({ name: 'Admin' });
+                            if (adminRole) {
+                                await this.usersService.create({
+                                    name: 'Admin User',
+                                    email: adminEmail,
+                                    password: 'admin123',
+                                    roles: [adminRole],
+                                });
+                                console.log('Seeded admin user: admin@example.com / admin123');
+                            }
+                        }
+                    }
 }

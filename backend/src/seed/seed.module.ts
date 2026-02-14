@@ -10,6 +10,7 @@ import { Permission, PermissionSchema } from '../roles/schemas/permission.schema
             { name: Role.name, schema: RoleSchema },
             { name: Permission.name, schema: PermissionSchema },
         ]),
+        UsersModule,
     ],
     providers: [SeedService],
 })
