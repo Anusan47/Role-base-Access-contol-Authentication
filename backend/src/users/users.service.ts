@@ -19,7 +19,10 @@ export class UsersService {
     }
 
     async findOneByEmail(email: string): Promise<User | null> {
-        return this.userModel.findOne({ email }).populate('roles').exec();
+        return this.userModel.findOne({ email }).populate({
+            path: 'roles',
+            populate: { path: 'permissions' }
+        }).exec();
     }
 
     async findById(id: string): Promise<User | null> {
