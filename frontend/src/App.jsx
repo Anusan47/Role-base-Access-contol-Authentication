@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import RoleMatrix from './pages/RoleMatrix';
 import AnalyticsDashboard from './pages/AnalyticsDashboard';
 import UserManagement from './pages/UserManagement';
+import Roles from './pages/Roles';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -55,7 +56,7 @@ function App() {
                             path="/roles"
                             element={
                                 <ProtectedRoute requiredPermission="manage_roles">
-                                    <div>Roles Management (Use Matrix for permissions)</div>
+                                    <Roles />
                                 </ProtectedRoute>
                             }
                         />

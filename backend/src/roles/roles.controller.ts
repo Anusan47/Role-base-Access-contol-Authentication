@@ -18,6 +18,12 @@ export class RolesController {
         return this.rolesService.findAllRoles();
     }
 
+    @Delete(':roleId')
+    @UseGuards(JwtAuthGuard)
+    deleteRole(@Param('roleId') roleId: string) {
+        return this.rolesService.deleteRole(roleId);
+    }
+
     @Post('permissions')
     @UseGuards(JwtAuthGuard)
     createPermission(@Body() createPermissionDto: any) {

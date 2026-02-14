@@ -48,4 +48,8 @@ export class RolesService {
     async findByName(name: string): Promise<Role | null> {
         return this.roleModel.findOne({ name }).exec();
     }
+
+    async deleteRole(roleId: string): Promise<Role | null> {
+        return this.roleModel.findByIdAndDelete(roleId).exec();
+    }
 }
