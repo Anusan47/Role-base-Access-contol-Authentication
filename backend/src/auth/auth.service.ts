@@ -44,4 +44,16 @@ export class AuthService {
     async register(userDto: any) {
         return this.usersService.create(userDto);
     }
+
+    async impersonate(userId: string) {
+        const user = await this.usersService.findById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        const userObj = user as any;
+        const payload = { email: userObj.email, sub: userObj._id, roles: userObj.roles };
+        return {
+            access_token: this.jwtService.sign(payload),
+        };
+    }
 }

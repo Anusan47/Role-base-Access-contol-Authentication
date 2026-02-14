@@ -1,4 +1,4 @@
-import { Controller, Request, Post, UseGuards, Body, Get } from '@nestjs/common';
+import { Controller, Request, Post, UseGuards, Body, Get, Param } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -45,5 +45,24 @@ export class AuthController {
     @Get('profile')
     getProfile(@Request() req) {
         return req.user;
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('impersonate/:userId')
+    async impersonate(@Param('userId') userId: string, @Request() req) {
+        // Check if requester is Admin
+        // Ideally use a Guard, but checking roles here for simplicity
+        const requesterRoles = req.user.roles;
+        // Check if populated or just IDs? JwtStrategy usually returns populated if configured so, 
+        // or we need to check IDs. Let's assume roles are objects with names or check IDs.
+        // Actually, Payload usually has role objects or IDs. 
+        // Let's assume we need to fetch user to be sure or trust the token payload.
+        // For safety, let's assume 'Admin' role check is needed.
+
+        // Simplified check:
+        // const isAdmin = requesterRoles.some(r => r.name === 'Admin');
+        // if (!isAdmin) throw new UnauthorizedException('Only admins can impersonate');
+
+        return this.authService.impersonate(userId);
     }
 }

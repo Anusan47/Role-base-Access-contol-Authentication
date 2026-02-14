@@ -4,32 +4,42 @@ import { useAuth } from '../context/AuthContext';
 const Sidebar = () => {
     const { user, logout } = useAuth();
 
-    const hasPermission = (permName) => {
-        return user?.roles.some(role =>
-            role.permissions.some(p => p.name === permName)
+    const hasPermission = (permissionName) => {
+        if (!user || !user.roles) return false;
+        return user.roles.some(role =>
+            role.permissions.some(p => p.name === permissionName)
         );
     };
 
+    const hasRole = (roleName) => {
+        if (!user || !user.roles) return false;
+        return user.roles.some(role => role.name === roleName);
+    };
+
     return (
-        <div className="w-64 bg-gray-800 text-white min-h-screen p-4">
-            <h2 className="text-2xl font-bold mb-6">Access Control</h2>
+        <div className="w-64 bg-gray-800 text-white flex flex-col p-4 h-full">
+            <h1 className="text-2xl font-bold mb-8 text-center">Access Control</h1>
             <nav className="flex flex-col space-y-2">
                 <Link to="/dashboard" className="p-2 hover:bg-gray-700 rounded">Dashboard</Link>
 
-                {hasPermission('manage_roles') && (
-                    <Link to="/roles" className="p-2 hover:bg-gray-700 rounded">Manage Roles</Link>
-                )}
-
                 {hasPermission('manage_permissions') && (
                     <Link to="/matrix" className="p-2 hover:bg-gray-700 rounded">Permission Matrix</Link>
+                )}
+
+                {hasPermission('manage_roles') && (
+                    <Link to="/roles" className="p-2 hover:bg-gray-700 rounded">Manage Roles</Link>
                 )}
 
                 {hasPermission('view_users') && (
                     <Link to="/users" className="p-2 hover:bg-gray-700 rounded">Users</Link>
                 )}
 
-                {hasPermission('view_dashboard') && ( // Assuming generic dashboard permission or specific one for analytics
+                {hasPermission('view_dashboard') && (
                     <Link to="/analytics" className="p-2 hover:bg-gray-700 rounded">Analytics</Link>
+                )}
+
+                {hasRole('Admin') && (
+                    <Link to="/audit" className="p-2 hover:bg-gray-700 rounded">Audit Logs</Link>
                 )}
 
                 <button onClick={logout} className="p-2 hover:bg-red-700 rounded text-left mt-auto">

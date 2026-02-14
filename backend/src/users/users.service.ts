@@ -51,4 +51,11 @@ export class UsersService {
     async remove(userId: string): Promise<User | null> {
         return this.userModel.findByIdAndDelete(userId).exec();
     }
+    async updateRoles(userId: string, roleIds: string[]): Promise<User | null> {
+        return this.userModel.findByIdAndUpdate(
+            userId,
+            { roles: roleIds },
+            { new: true },
+        ).populate('roles').exec();
+    }
 }

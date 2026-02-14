@@ -8,6 +8,7 @@ import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
 import { SeedModule } from './seed/seed.module';
 import { AnalyticsModule } from './analytics/analytics.module';
+import { AuditModule } from './audit/audit.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AnalyticsModule } from './analytics/analytics.module';
     AuthModule,
     SeedModule,
     AnalyticsModule,
+    AuditModule,
   ],
   controllers: [AppController],
   providers: [AppService],
