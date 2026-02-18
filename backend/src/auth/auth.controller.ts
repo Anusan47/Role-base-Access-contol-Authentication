@@ -21,6 +21,8 @@ export class AuthController {
         }
         const ip = req.ip || req.connection.remoteAddress;
         const userAgent = req.headers['user-agent'];
+        // Assume login method updated to take ip and userAgent, if not, update calls it with extra args which is fine in JS/TS if not strict
+        // But we DID update it in Step 81.
         return this.authService.login(user, ip, userAgent);
     }
 
@@ -64,5 +66,14 @@ export class AuthController {
         // if (!isAdmin) throw new UnauthorizedException('Only admins can impersonate');
 
         return this.authService.impersonate(userId);
+    }
+    @Post('forgot-password')
+    async forgotPassword(@Body('email') email: string) {
+        return this.authService.forgotPassword(email);
+    }
+
+    @Post('reset-password')
+    async resetPassword(@Body('token') token: string, @Body('password') password: string) {
+        return this.authService.resetPassword(token, password);
     }
 }
